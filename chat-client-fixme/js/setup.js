@@ -1,5 +1,5 @@
 // This will attach your set your credentials as headers for all requests sent.
-$.ajaxPrefilter(function(settings, _, jqXHR) {
+$.ajaxPrefilter(function (settings, _, jqXHR) {
   jqXHR.setRequestHeader('X-Parse-Application-Id', '5ec0221ee8b439a1fc8fdfd6a638b3e6af1cb1b4');
   jqXHR.setRequestHeader('X-Parse-REST-API-Key', 'bbfaf2b05152043f1b8207ba13c600d4bf296795');
 });
@@ -9,21 +9,21 @@ $.ajaxPrefilter(function(settings, _, jqXHR) {
 var SERVER_URL = 'http://parse.shared.hackreactor.com/chatterbox/classes/messages';
 
 //This one calls the Parse server to grab data, and sends it to processData
-var getData = function() {
+var getData = function () {
   $.ajax(SERVER_URL + '?order=-createdAt', {
     contentType: 'application/json',
-    success: function(data) {
+    success: function (data) {
       processData(data); // eslint-disable-line no-use-before-define
     },
-    error: function(data) {
+    error: function (data) {
       $('#error').prepend(' oh no').append('!');
     }
   });
 };
 
 // Here we sort the server messages by 'Created at' and send them to displayData
-var processData = function(data) {
-  var sortedData = data.results.sort(function(a, b) {
+var processData = function (data) {
+  var sortedData = data.results.sort(function (a, b) {
     var aDate = new Date(a.createdAt);
     var bDate = new Date(b.createdAt);
     if (aDate > bDate) {
@@ -34,10 +34,10 @@ var processData = function(data) {
       return 1;
     }
   });
-  displayData({results: sortedData}, userSelected); // eslint-disable-line no-use-before-define
+  displayData({ results: sortedData }, userSelected); // eslint-disable-line no-use-before-define
 };
 
-var checkNewData = function(data) {
+var checkNewData = function (data) {
   var compDate = newestDate; // eslint-disable-line no-use-before-define
   var newDate = new Date(data.results[0].createdAt);
   if (newDate > compDate) {
@@ -51,7 +51,7 @@ var userSelectedGroup = {};
 var newestDate = new Date();
 var userSelected;
 
-var displayData = function(data, user) {
+var displayData = function (data, user) {
   var $results = [];
   var resultCount = 0;
 
@@ -81,7 +81,7 @@ var displayData = function(data, user) {
 
   $('#main').find('ul').html($results);
 
-  $('.onlyUser').on('click', function() {
+  $('.onlyUser').on('click', function () {
     if (userSelected !== $(this).closest('li').data('username')) {
       userSelected = $(this).closest('li').data('username');
       $('#backButton').toggle();
@@ -94,7 +94,7 @@ var displayData = function(data, user) {
     }
   });
 
-  $('.addUser').on('click', function() {
+  $('.addUser').on('click', function () {
     if (userSelectedGroup[$(this).closest('li').data('username')]) {
       delete userSelectedGroup[$(this).closest('li').data('username')];
     } else {
@@ -104,7 +104,7 @@ var displayData = function(data, user) {
   });
 };
 
-var postData = function(message, username) {
+var postData = function (message, username) {    // 서버에 메세지를 보내는 function은 postData임, ajax를 통해, Stringify된 data를 보내며, 성공시에 data를 콘솔에 출력함
   $.ajax({
     url: SERVER_URL,
     contentType: 'application/json',
@@ -113,10 +113,11 @@ var postData = function(message, username) {
       username: username,
       text: message
     }),
-    success: function(data) {
+    success: function (data) {
       console.log('Success!', data);
+      getData() //서버에 메세지를 보내고 나서 update된 전체데이타를 가져오고 render할수 있도록 getData function을 호출함
     },
-    error: function(data) {
+    error: function (data) {
       console.log(data);
     }
   });

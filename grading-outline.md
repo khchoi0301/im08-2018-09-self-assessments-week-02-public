@@ -4,6 +4,10 @@
 
 Pull Request 를 제출할때 스스로 평가 등급을 코멘트에 작성합니다. (ex. [Complete] filter-family-members, [Mostly complete] tree-map )
 
+[Complete] algo-time-complexity
+[Complete] chat-client-fixme
+[Complete] react-pond
+
 ### Assessment Grading Scale
 
 Qualitative grade  | Meaning
